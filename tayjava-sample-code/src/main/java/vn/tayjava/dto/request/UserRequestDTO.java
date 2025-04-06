@@ -1,14 +1,13 @@
 package vn.tayjava.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import org.springframework.format.annotation.DateTimeFormat;
+import vn.tayjava.util.PhoneNumber;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class UserRequestDTO implements Serializable {
     @NotBlank(message = "firstName must be not blank")
@@ -17,13 +16,18 @@ public class UserRequestDTO implements Serializable {
     private String lastName;
     @Email(message = "email invalid format")
     private String email;
-    @Pattern(regexp = "^\\d{10}$", message = "phone invalid format")
+
+    //@Pattern(regexp = "^\\d{10}$", message = "phone invalid format")
+    @PhoneNumber
     private String phone;
 
     @NotNull(message = "dateOfBirth must not be null")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @JsonFormat(pattern = "MM/dd/yyyy")
     private Date dateOfBirth;
+
+    @NotEmpty
+    private List<String> permission;
 
     public UserRequestDTO(String firstName, String lastName, String phone, String email) {
         this.firstName = firstName;
@@ -76,5 +80,11 @@ public class UserRequestDTO implements Serializable {
         this.phone = phone;
     }
 
+    public @NotEmpty List<String> getPermission() {
+        return permission;
+    }
 
+    public void setPermission(@NotEmpty List<String> permission) {
+        this.permission = permission;
+    }
 }
