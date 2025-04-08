@@ -3,11 +3,13 @@ package vn.tayjava.dto.request;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
 import org.springframework.format.annotation.DateTimeFormat;
-import vn.tayjava.util.PhoneNumber;
+import vn.tayjava.util.*;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+
+import static vn.tayjava.util.Gender.*;
 
 public class UserRequestDTO implements Serializable {
     @NotBlank(message = "firstName must be not blank")
@@ -25,6 +27,18 @@ public class UserRequestDTO implements Serializable {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @JsonFormat(pattern = "MM/dd/yyyy")
     private Date dateOfBirth;
+
+    //@Pattern(regexp = "^ACTIVE|INACTIVE|NONE$", message = "status must be one in {ACTIVE, INACTIVE, NONE}")
+    @EnumPattern(name = "status", regexp = "ACTIVE|INACTIVE|NONE")
+    private UserStatus status;
+
+    @NotNull(message = "gender must not be null")
+    @EnumValue(name = "gender", enumClass = Gender.class)
+    private String gender;
+
+    @NotNull(message = "type must not be null")
+    @EnumValue(name = "type", enumClass = UserType.class)
+    private String type;
 
     @NotEmpty
     private List<String> permission;
@@ -51,10 +65,6 @@ public class UserRequestDTO implements Serializable {
     public String getEmail() {
         return email;
     }
-
-
-
-
 
     public void setFirstName(@NotBlank(message = "firstName must be not blank") String firstName) {
         this.firstName = firstName;
@@ -86,5 +96,17 @@ public class UserRequestDTO implements Serializable {
 
     public void setPermission(@NotEmpty List<String> permission) {
         this.permission = permission;
+    }
+
+    public UserStatus getStatus() {
+        return status;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public @NotNull(message = "type must not be null") @EnumValue(name = "type", enumClass = UserType.class) String getType() {
+        return type;
     }
 }
